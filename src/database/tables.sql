@@ -11,10 +11,11 @@ CREATE TABLE "questions" (
 
 
 
-CREATE TABLE ".users" (
+CREATE TABLE "users" (
 	"id" serial NOT NULL,
 	"name" TEXT NOT NULL,
 	"class" char(3) NOT NULL,
+	"token" uuid NOT NULL,
 	CONSTRAINT "users_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
