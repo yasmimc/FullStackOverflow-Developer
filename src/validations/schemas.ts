@@ -7,4 +7,9 @@ const questionsSchema: joi.ObjectSchema = joi.object({
     tags: joi.string(),
 });
 
-export { questionsSchema };
+const usersSchema: joi.ObjectSchema = joi.object({
+    name: joi.string().min(3).required(),
+    class: joi.string().max(3).required(),
+});
+
+export { questionsSchema, usersSchema };

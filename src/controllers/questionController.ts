@@ -15,19 +15,19 @@ async function postQuestion(req: Request, res: Response): Promise<Response> {
             newQuestion
         );
 
-        res.send(insertedQuestionId);
+        return res.send(insertedQuestionId);
     } catch (error) {
-        res.sendStatus(500);
+        return res.sendStatus(500);
     }
 }
 
-async function getQuestion(req: Request, res: Response) {
+async function getQuestion(req: Request, res: Response): Promise<Response> {
     try {
         const { id } = req.params;
         const question = await questionService.getQuestionById(Number(id));
-        res.send(question);
+        return res.send(question);
     } catch (error) {
-        res.sendStatus(500);
+        return res.sendStatus(500);
     }
 }
 
