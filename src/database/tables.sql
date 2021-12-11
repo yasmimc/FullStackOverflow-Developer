@@ -1,9 +1,9 @@
 CREATE TABLE "questions" (
 	"id" serial NOT NULL,
 	"question" TEXT NOT NULL,
-	"student_id" int NOT NULL,
 	"sumit_at" timestamp with time zone NOT NULL DEFAULT 'now()',
-	"answer" TEXT,
+	"student_name" TEXT NOT NULL,
+	"student_class" char(3) NOT NULL,
 	CONSTRAINT "questions_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -44,12 +44,28 @@ CREATE TABLE "questions_tags" (
 
 
 
-ALTER TABLE "questions" ADD CONSTRAINT "questions_fk0" FOREIGN KEY ("student_id") REFERENCES "users"("id");
+CREATE TABLE "answers" (
+	"id" serial NOT NULL,
+	"question_id" int NOT NULL,
+	"answered_by" int NOT NULL,
+	"answer" TEXT NOT NULL,
+	"answered_at" timestamp with time zone NOT NULL DEFAULT 'now()',
+	CONSTRAINT "answers_pk" PRIMARY KEY ("id")
+) WITH (
+  OIDS=FALSE
+);
+
+
+
 
 
 
 ALTER TABLE "questions_tags" ADD CONSTRAINT "questions_tags_fk0" FOREIGN KEY ("tag_id") REFERENCES "tags"("id");
 ALTER TABLE "questions_tags" ADD CONSTRAINT "questions_tags_fk1" FOREIGN KEY ("question_id") REFERENCES "questions"("id");
+
+ALTER TABLE "answers" ADD CONSTRAINT "answers_fk0" FOREIGN KEY ("question_id") REFERENCES "questions"("id");
+ALTER TABLE "answers" ADD CONSTRAINT "answers_fk1" FOREIGN KEY ("answered_by") REFERENCES "users"("id");
+
 
 
 
