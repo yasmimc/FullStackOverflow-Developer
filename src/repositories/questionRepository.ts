@@ -69,4 +69,22 @@ async function insertQuestionTags(
     return result;
 }
 
-export { insertQuestion, insertTags, findTags, insertQuestionTags };
+async function fetchUnansweredQuestion(id: number): Promise<QuestionDB> {
+    const result = await connection.query(
+        `SELECT * FROM questions WHERE id=$1`,
+        [id]
+    );
+
+    if (!result) {
+        return null;
+    }
+    return result.rows[0];
+}
+
+export {
+    insertQuestion,
+    insertTags,
+    findTags,
+    insertQuestionTags,
+    fetchUnansweredQuestion,
+};

@@ -21,4 +21,14 @@ async function postQuestion(req: Request, res: Response): Promise<Response> {
     }
 }
 
-export { postQuestion };
+async function getQuestion(req: Request, res: Response) {
+    try {
+        const { id } = req.params;
+        const question = await questionService.getQuestionById(Number(id));
+        res.send(question);
+    } catch (error) {
+        res.sendStatus(500);
+    }
+}
+
+export { postQuestion, getQuestion };

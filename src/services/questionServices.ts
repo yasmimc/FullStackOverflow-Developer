@@ -61,4 +61,15 @@ async function createQuestion(question: Question): Promise<Object> {
     return { id: insertedQuestion.id };
 }
 
-export { createQuestion };
+async function getQuestionById(id: number): Promise<QuestionDB> {
+    const unansweredQuestion = await questionRepository.fetchUnansweredQuestion(
+        id
+    );
+
+    if (!unansweredQuestion) {
+        throw new Error();
+    }
+    return unansweredQuestion;
+}
+
+export { createQuestion, getQuestionById };
