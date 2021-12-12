@@ -1,5 +1,6 @@
 import AnsweredQuestionError from '../errors/AnsweredQuestionError';
 import AnswerNotFoundError from '../errors/AnswerNotFoundError';
+import InsertTagsError from '../errors/InsertTagsError';
 import PostQuestionError from '../errors/PostQuestionError';
 import UnansweredQuestionsNotFoundError from '../errors/UnansweredQuestionsNotFoundError';
 import AnswerDB from '../protocols/AnswerDB';
@@ -46,7 +47,7 @@ async function createQuestion(question: Question): Promise<Object> {
             );
 
             if (!insertedTags) {
-                throw new Error();
+                throw new InsertTagsError('Error saving question tags');
             }
 
             insertedTags.forEach((tag) => tagsIds.push(tag));
@@ -59,7 +60,7 @@ async function createQuestion(question: Question): Promise<Object> {
             );
 
         if (!insertedQuestionTags) {
-            throw new Error();
+            throw new InsertTagsError('Error saving question tags');
         }
     }
 
