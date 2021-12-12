@@ -121,7 +121,11 @@ async function postAnswer(
     if (!updatedQuestion) {
         throw new InsertAnswerError('Error posting answer');
     }
-    return formatAnswerObj(questionAnswer);
+
+    const formatedQuestionObj = formatAnswerObj(questionAnswer);
+    delete formatedQuestionObj.answeredAt;
+    delete formatedQuestionObj.answeredBy;
+    return formatedQuestionObj;
 }
 
 async function getUnansweredQuestions(): Promise<QuestionResObj[]> {

@@ -16,6 +16,7 @@ async function registerUser(req: Request, res: Response): Promise<Response> {
         const registeredUser = await userService.createUser(newUser);
         return res.send(registeredUser);
     } catch (error) {
+        console.log(error);
         res.sendStatus(500);
     }
 }

@@ -10,6 +10,9 @@ async function createUser(user: User): Promise<UserDB> {
     if (!newUser) {
         throw new Error();
     }
+    delete newUser.id;
+    delete newUser.name;
+    delete newUser.class;
     return newUser;
 }
 
