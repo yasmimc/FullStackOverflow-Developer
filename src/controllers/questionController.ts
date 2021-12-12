@@ -3,8 +3,8 @@ import { Question } from '../protocols/Question';
 import { questionsSchema } from '../validations/schemas';
 import * as questionService from '../services/questionServices';
 import AnsweredQuestionError from '../errors/AnsweredQuestionError';
-import AnswerNotFoundError from '../errors/AnswerNotFoundError';
 import UnansweredQuestionsNotFoundError from '../errors/UnansweredQuestionsNotFoundError';
+import QuestionNotFoundError from '../errors/QuestionNotFoundError';
 
 async function postQuestion(req: Request, res: Response): Promise<Response> {
     try {
@@ -50,7 +50,7 @@ async function postAnswer(req: Request, res: Response) {
             return res.status(400).send(error.message);
         }
 
-        if (error instanceof AnswerNotFoundError) {
+        if (error instanceof QuestionNotFoundError) {
             return res.status(404).send(error.message);
         }
 

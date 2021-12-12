@@ -1,7 +1,7 @@
 import AnsweredQuestionError from '../errors/AnsweredQuestionError';
-import AnswerNotFoundError from '../errors/AnswerNotFoundError';
 import InsertTagsError from '../errors/InsertTagsError';
 import PostQuestionError from '../errors/PostQuestionError';
+import QuestionNotFoundError from '../errors/QuestionNotFoundError';
 import UnansweredQuestionsNotFoundError from '../errors/UnansweredQuestionsNotFoundError';
 import AnswerDB from '../protocols/AnswerDB';
 import { Question } from '../protocols/Question';
@@ -71,7 +71,7 @@ async function getQuestionById(id: number): Promise<QuestionDB> {
     const question = await questionRepository.fetchQuestion(id);
 
     if (!question) {
-        throw new Error();
+        throw new QuestionNotFoundError('This question was not found');
     }
 
     if (question.answered) {
@@ -92,7 +92,7 @@ async function postAnswer(
     const question = await questionRepository.fetchQuestion(questionId);
 
     if (!question) {
-        throw new AnswerNotFoundError('This question was not found');
+        throw new QuestionNotFoundError('This question was not found');
     }
 
     if (question.answered) {
