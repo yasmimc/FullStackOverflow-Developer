@@ -1,13 +1,16 @@
+import AnsweredQuestionError from '../errors/AnsweredQuestionError';
+import AnswerNotFoundError from '../errors/AnswerNotFoundError';
+import AnswerDB from '../protocols/AnswerDB';
 import { Question } from '../protocols/Question';
 import { QuestionDB } from '../protocols/QuestionDB';
 import TagDB from '../protocols/TagDB';
 import * as questionRepository from '../repositories/questionRepository';
 
 async function createQuestion(question: Question): Promise<Object> {
-    const newQuestion: QuestionDB = {
+    const newQuestion: Question = {
         question: question.question.trim(),
-        student_name: question.student.trim(),
-        student_class: question.class.trim(),
+        student: question.student.trim(),
+        class: question.class.trim(),
     };
 
     const insertedQuestion: QuestionDB =
@@ -62,9 +65,7 @@ async function createQuestion(question: Question): Promise<Object> {
 }
 
 async function getQuestionById(id: number): Promise<QuestionDB> {
-    const unansweredQuestion = await questionRepository.fetchUnansweredQuestion(
-        id
-    );
+    const unansweredQuestion = await questionRepository.fetchQuestion(id);
 
     if (!unansweredQuestion) {
         throw new Error();
@@ -72,4 +73,41 @@ async function getQuestionById(id: number): Promise<QuestionDB> {
     return unansweredQuestion;
 }
 
-export { createQuestion, getQuestionById };
+async function postAnswer(
+    questionId: number,
+    answeredBy: number,
+    answer: string
+): Promise<AnswerDB> {
+    const question = await questionRepository.fetchQuestion(questionId);
+
+    if (!question) {
+        throw new AnswerNotFoundError('This question was not found');
+    }
+
+    if (question.answered) {
+        throw new AnsweredQuestionError(
+            'This question has been alredy answered'
+        );
+    }
+
+    const questionAnswer = await questionRepository.insertAnswer(
+        questionId,
+        answeredBy,
+        answer
+    );
+
+    if (!questionAnswer) {
+        throw new Error();
+    }
+
+    const updatedQuestion = await questionRepository.updateQuestionAsAnswered(
+        questionId
+    );
+
+    if (!updatedQuestion) {
+        throw new Error();
+    }
+    return questionAnswer;
+}
+
+export { createQuestion, getQuestionById, postAnswer };

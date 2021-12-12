@@ -4,6 +4,7 @@ CREATE TABLE "questions" (
 	"sumit_at" timestamp with time zone NOT NULL DEFAULT 'now()',
 	"student_name" TEXT NOT NULL,
 	"student_class" char(3) NOT NULL,
+	"answered" bool NOT NULL DEFAULT 'false',
 	CONSTRAINT "questions_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE

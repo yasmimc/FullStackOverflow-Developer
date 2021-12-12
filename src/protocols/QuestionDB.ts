@@ -3,4 +3,5 @@ export interface QuestionDB {
     question: string;
     student_name: string;
     student_class: string;
+    answered: boolean;
 }

@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { Question } from '../protocols/Question';
 import { questionsSchema } from '../validations/schemas';
 import * as questionService from '../services/questionServices';
+import AnsweredQuestionError from '../errors/AnsweredQuestionError';
+import AnswerNotFoundError from '../errors/AnswerNotFoundError';
 
 async function postQuestion(req: Request, res: Response): Promise<Response> {
     try {
@@ -31,4 +33,28 @@ async function getQuestion(req: Request, res: Response): Promise<Response> {
     }
 }
 
-export { postQuestion, getQuestion };
+async function postAnswer(req: Request, res: Response) {
+    try {
+        const { id } = req.params;
+        const { user } = res.locals;
+        const { answer } = req.body;
+        const question = await questionService.postAnswer(
+            Number(id),
+            user.id,
+            answer
+        );
+        res.send(question);
+    } catch (error) {
+        if (error instanceof AnsweredQuestionError) {
+            return res.status(400).send(error.message);
+        }
+
+        if (error instanceof AnswerNotFoundError) {
+            return res.status(404).send(error.message);
+        }
+
+        res.sendStatus(500);
+    }
+}
+
+export { postQuestion, getQuestion, postAnswer };

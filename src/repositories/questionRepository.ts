@@ -1,9 +1,12 @@
 import connection from '../database/connection';
+import AnswerDB from '../protocols/AnswerDB';
+import { Question } from '../protocols/Question';
 import { QuestionDB } from '../protocols/QuestionDB';
 import TagDB from '../protocols/TagDB';
 
-async function insertQuestion(question: QuestionDB): Promise<QuestionDB> {
-    const query = `INSERT INTO questions(${Object.keys(question)}) 
+async function insertQuestion(question: Question): Promise<QuestionDB> {
+    delete question.tags;
+    const query = `INSERT INTO questions(question, student_name, student_class) 
         VALUES ($1, $2, $3) RETURNING *`;
 
     const values = Object.values(question);
@@ -69,10 +72,39 @@ async function insertQuestionTags(
     return result;
 }
 
-async function fetchUnansweredQuestion(id: number): Promise<QuestionDB> {
+async function fetchQuestion(id: number): Promise<QuestionDB> {
     const result = await connection.query(
         `SELECT * FROM questions WHERE id=$1`,
         [id]
+    );
+
+    if (!result) {
+        return null;
+    }
+    return result.rows[0];
+}
+
+async function insertAnswer(
+    questionId: number,
+    answeredBy: number,
+    answer: string
+): Promise<AnswerDB> {
+    const result = await connection.query(
+        `INSERT INTO answers (question_id, answered_by, answer) VALUES($1, $2, $3) RETURNING *`,
+        [questionId, answeredBy, answer]
+    );
+
+    if (!result) {
+        return null;
+    }
+
+    return result.rows[0];
+}
+
+async function updateQuestionAsAnswered(questionId: number) {
+    const result = await connection.query(
+        `UPDATE questions SET answered = true WHERE id=$1 RETURNING *;`,
+        [questionId]
     );
 
     if (!result) {
@@ -86,5 +118,7 @@ export {
     insertTags,
     findTags,
     insertQuestionTags,
-    fetchUnansweredQuestion,
+    fetchQuestion,
+    insertAnswer,
+    updateQuestionAsAnswered,
 };

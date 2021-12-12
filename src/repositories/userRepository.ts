@@ -15,4 +15,16 @@ async function insertUser(user: User): Promise<UserDB> {
     return result.rows[0];
 }
 
-export { insertUser };
+async function fetchUserByToken(token: string): Promise<UserDB> {
+    const result = await connection.query(
+        `SELECT * FROM users WHERE token = $1`,
+        [token]
+    );
+
+    if (!result) {
+        return null;
+    }
+    return result.rows[0];
+}
+
+export { insertUser, fetchUserByToken };
