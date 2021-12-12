@@ -127,6 +127,18 @@ async function fetchQuestionAnswer(questionId: number): Promise<AnswerDB> {
     return result.rows[0];
 }
 
+async function fetchUnansweredQuestions(): Promise<QuestionDB[]> {
+    const result = await connection.query(
+        `SELECT * FROM questions WHERE  answered = false`,
+        []
+    );
+
+    if (!result) {
+        return null;
+    }
+    return result.rows;
+}
+
 export {
     insertQuestion,
     insertTags,
@@ -136,4 +148,5 @@ export {
     insertAnswer,
     updateQuestionAsAnswered,
     fetchQuestionAnswer,
+    fetchUnansweredQuestions,
 };

@@ -57,4 +57,17 @@ async function postAnswer(req: Request, res: Response) {
     }
 }
 
-export { postQuestion, getQuestion, postAnswer };
+async function getUnansweredQuestions(
+    req: Request,
+    res: Response
+): Promise<Response> {
+    try {
+        const unansweredQuestions =
+            await questionService.getUnansweredQuestions();
+        return res.send(unansweredQuestions);
+    } catch (error) {
+        res.sendStatus(500);
+    }
+}
+
+export { postQuestion, getQuestion, postAnswer, getUnansweredQuestions };

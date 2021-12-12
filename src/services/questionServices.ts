@@ -118,4 +118,12 @@ async function postAnswer(
     return questionAnswer;
 }
 
-export { createQuestion, getQuestionById, postAnswer };
+async function getUnansweredQuestions(): Promise<QuestionDB[]> {
+    const result = await questionRepository.fetchUnansweredQuestions();
+    if (!result) {
+        throw new Error();
+    }
+    return result;
+}
+
+export { createQuestion, getQuestionById, postAnswer, getUnansweredQuestions };
