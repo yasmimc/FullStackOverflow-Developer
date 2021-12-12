@@ -65,12 +65,20 @@ async function createQuestion(question: Question): Promise<Object> {
 }
 
 async function getQuestionById(id: number): Promise<QuestionDB> {
-    const unansweredQuestion = await questionRepository.fetchQuestion(id);
+    const question = await questionRepository.fetchQuestion(id);
 
-    if (!unansweredQuestion) {
+    if (!question) {
         throw new Error();
     }
-    return unansweredQuestion;
+
+    if (question.answered) {
+        const answer = await questionRepository.fetchQuestionAnswer(
+            question.id
+        );
+
+        return { ...question, ...answer };
+    }
+    return question;
 }
 
 async function postAnswer(

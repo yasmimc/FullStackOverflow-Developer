@@ -101,9 +101,23 @@ async function insertAnswer(
     return result.rows[0];
 }
 
-async function updateQuestionAsAnswered(questionId: number) {
+async function updateQuestionAsAnswered(
+    questionId: number
+): Promise<QuestionDB> {
     const result = await connection.query(
         `UPDATE questions SET answered = true WHERE id=$1 RETURNING *;`,
+        [questionId]
+    );
+
+    if (!result) {
+        return null;
+    }
+    return result.rows[0];
+}
+
+async function fetchQuestionAnswer(questionId: number): Promise<AnswerDB> {
+    const result = await connection.query(
+        `SELECT * FROM answers WHERE question_id=$1`,
         [questionId]
     );
 
@@ -121,4 +135,5 @@ export {
     fetchQuestion,
     insertAnswer,
     updateQuestionAsAnswered,
+    fetchQuestionAnswer,
 };
