@@ -1,4 +1,5 @@
 import AnsweredQuestionError from '../errors/AnsweredQuestionError';
+import InsertAnswerError from '../errors/InsertAnswerError';
 import InsertTagsError from '../errors/InsertTagsError';
 import PostQuestionError from '../errors/PostQuestionError';
 import QuestionNotFoundError from '../errors/QuestionNotFoundError';
@@ -108,7 +109,7 @@ async function postAnswer(
     );
 
     if (!questionAnswer) {
-        throw new Error();
+        throw new InsertAnswerError('Error posting answer');
     }
 
     const updatedQuestion = await questionRepository.updateQuestionAsAnswered(
@@ -116,7 +117,7 @@ async function postAnswer(
     );
 
     if (!updatedQuestion) {
-        throw new Error();
+        throw new InsertAnswerError('Error posting answer');
     }
     return questionAnswer;
 }
