@@ -1,5 +1,6 @@
 import AnsweredQuestionError from '../errors/AnsweredQuestionError';
 import AnswerNotFoundError from '../errors/AnswerNotFoundError';
+import PostQuestionError from '../errors/PostQuestionError';
 import UnansweredQuestionsNotFoundError from '../errors/UnansweredQuestionsNotFoundError';
 import AnswerDB from '../protocols/AnswerDB';
 import { Question } from '../protocols/Question';
@@ -18,7 +19,7 @@ async function createQuestion(question: Question): Promise<Object> {
         await questionRepository.insertQuestion(newQuestion);
 
     if (!insertedQuestion) {
-        throw new Error();
+        throw new PostQuestionError('Error posting question');
     }
 
     if (question.tags) {
