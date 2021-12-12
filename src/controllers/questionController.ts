@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import Question from '../protocols/Question';
-import { questionsSchema } from '../validations/schemas';
+import { answersSchema, questionsSchema } from '../validations/schemas';
 import * as questionService from '../services/questionServices';
 import AnsweredQuestionError from '../errors/AnsweredQuestionError';
 import UnansweredQuestionsNotFoundError from '../errors/UnansweredQuestionsNotFoundError';
@@ -8,6 +8,7 @@ import QuestionNotFoundError from '../errors/QuestionNotFoundError';
 import PostQuestionError from '../errors/PostQuestionError';
 import InsertTagsError from '../errors/InsertTagsError';
 import InsertAnswerError from '../errors/InsertAnswerError';
+import { compileFunction } from 'vm';
 
 async function postQuestion(req: Request, res: Response): Promise<Response> {
     try {
@@ -48,9 +49,15 @@ async function getQuestion(req: Request, res: Response): Promise<Response> {
 
 async function postAnswer(req: Request, res: Response) {
     try {
+        const validation = answersSchema.validate(req.body);
+        if (validation.error) {
+            return res.sendStatus(400);
+        }
+
         const { id } = req.params;
         const { user } = res.locals;
         const { answer } = req.body;
+
         const question = await questionService.postAnswer(
             Number(id),
             user.id,
@@ -69,6 +76,7 @@ async function postAnswer(req: Request, res: Response) {
         if (error instanceof InsertAnswerError) {
             return res.status(502).send(error.message);
         }
+        console.log(error.message);
         return res.sendStatus(500);
     }
 }

@@ -27,14 +27,22 @@ async function validateUserAuthentication(
 ): Promise<Response> {
     try {
         const { authorization } = req.headers;
-        const token = authorization.replace('Bearer ', '');
-        const user = await userService.findUserByToken(token);
+        if (!authorization) {
+            return res.status(401).send('Token not found');
+        }
 
+        const token = authorization.replace('Bearer ', '').trim();
+        if (!token) {
+            return res.status(401).send('Token not found');
+        }
+
+        const user = await userService.findUserByToken(token);
         res.locals = { user };
     } catch (error) {
         if (error instanceof AuthError) {
             return res.status(401).send(error.message);
         }
+        console.log('aaaa');
         res.sendStatus(500);
     }
 }

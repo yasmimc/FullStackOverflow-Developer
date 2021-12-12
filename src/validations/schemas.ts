@@ -12,4 +12,8 @@ const usersSchema: joi.ObjectSchema = joi.object({
     class: joi.string().max(3).required(),
 });
 
-export { questionsSchema, usersSchema };
+const answersSchema: joi.ObjectSchema = joi.object({
+    ansewer: joi.string().required(),
+});
+
+export { questionsSchema, usersSchema, answersSchema };
