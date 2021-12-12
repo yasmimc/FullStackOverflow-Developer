@@ -4,6 +4,7 @@ import { questionsSchema } from '../validations/schemas';
 import * as questionService from '../services/questionServices';
 import AnsweredQuestionError from '../errors/AnsweredQuestionError';
 import AnswerNotFoundError from '../errors/AnswerNotFoundError';
+import UnansweredQuestionsNotFoundError from '../errors/UnansweredQuestionsNotFoundError';
 
 async function postQuestion(req: Request, res: Response): Promise<Response> {
     try {
@@ -66,6 +67,9 @@ async function getUnansweredQuestions(
             await questionService.getUnansweredQuestions();
         return res.send(unansweredQuestions);
     } catch (error) {
+        if (error instanceof UnansweredQuestionsNotFoundError) {
+            return res.status(404).send(error.message);
+        }
         res.sendStatus(500);
     }
 }

@@ -1,5 +1,6 @@
 import AnsweredQuestionError from '../errors/AnsweredQuestionError';
 import AnswerNotFoundError from '../errors/AnswerNotFoundError';
+import UnansweredQuestionsNotFoundError from '../errors/UnansweredQuestionsNotFoundError';
 import AnswerDB from '../protocols/AnswerDB';
 import { Question } from '../protocols/Question';
 import { QuestionDB } from '../protocols/QuestionDB';
@@ -122,6 +123,11 @@ async function getUnansweredQuestions(): Promise<QuestionDB[]> {
     const result = await questionRepository.fetchUnansweredQuestions();
     if (!result) {
         throw new Error();
+    }
+    if (result.length === 0) {
+        throw new UnansweredQuestionsNotFoundError(
+            'Unanswered questions were not found'
+        );
     }
     return result;
 }
