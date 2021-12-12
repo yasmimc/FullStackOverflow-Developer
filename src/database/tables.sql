@@ -1,7 +1,7 @@
 CREATE TABLE "questions" (
 	"id" serial NOT NULL,
 	"question" TEXT NOT NULL,
-	"sumit_at" timestamp with time zone NOT NULL DEFAULT 'now()',
+	"submit_at" timestamp NOT NULL DEFAULT 'now()',
 	"student_name" TEXT NOT NULL,
 	"student_class" char(3) NOT NULL,
 	"answered" bool NOT NULL DEFAULT 'false',

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Question } from '../protocols/Question';
+import Question from '../protocols/Question';
 import { questionsSchema } from '../validations/schemas';
 import * as questionService from '../services/questionServices';
 import AnsweredQuestionError from '../errors/AnsweredQuestionError';

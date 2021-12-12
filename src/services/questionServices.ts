@@ -5,8 +5,10 @@ import PostQuestionError from '../errors/PostQuestionError';
 import QuestionNotFoundError from '../errors/QuestionNotFoundError';
 import UnansweredQuestionsNotFoundError from '../errors/UnansweredQuestionsNotFoundError';
 import AnswerDB from '../protocols/AnswerDB';
-import { Question } from '../protocols/Question';
-import { QuestionDB } from '../protocols/QuestionDB';
+import AnswerResObj from '../protocols/AnswerResObj';
+import Question from '../protocols/Question';
+import QuestionDB from '../protocols/QuestionDB';
+import QuestionResObj from '../protocols/QuestionResObj';
 import TagDB from '../protocols/TagDB';
 import * as questionRepository from '../repositories/questionRepository';
 
@@ -68,7 +70,7 @@ async function createQuestion(question: Question): Promise<Object> {
     return { id: insertedQuestion.id };
 }
 
-async function getQuestionById(id: number): Promise<QuestionDB> {
+async function getQuestionById(id: number): Promise<QuestionResObj> {
     const question = await questionRepository.fetchQuestion(id);
 
     if (!question) {
@@ -80,16 +82,16 @@ async function getQuestionById(id: number): Promise<QuestionDB> {
             question.id
         );
 
-        return { ...question, ...answer };
+        return { ...formatQuestionObj(question), ...formatAnswerObj(answer) };
     }
-    return question;
+    return formatQuestionObj(question);
 }
 
 async function postAnswer(
     questionId: number,
     answeredBy: number,
     answer: string
-): Promise<AnswerDB> {
+): Promise<AnswerResObj> {
     const question = await questionRepository.fetchQuestion(questionId);
 
     if (!question) {
@@ -119,11 +121,12 @@ async function postAnswer(
     if (!updatedQuestion) {
         throw new InsertAnswerError('Error posting answer');
     }
-    return questionAnswer;
+    return formatAnswerObj(questionAnswer);
 }
 
-async function getUnansweredQuestions(): Promise<QuestionDB[]> {
-    const result = await questionRepository.fetchUnansweredQuestions();
+async function getUnansweredQuestions(): Promise<QuestionResObj[]> {
+    const result: QuestionDB[] =
+        await questionRepository.fetchUnansweredQuestions();
     if (!result) {
         throw new Error();
     }
@@ -132,7 +135,38 @@ async function getUnansweredQuestions(): Promise<QuestionDB[]> {
             'Unanswered questions were not found'
         );
     }
-    return result;
+    return result.map((question) => formatQuestionObj(question));
+}
+
+function formatQuestionObj(question: QuestionDB): QuestionResObj {
+    const formatQuestionObj = {
+        id: question.id,
+        ...question,
+        submitAt: new Date(question.submit_at)
+            .toISOString()
+            .replace('T', ' ')
+            .split('Z')[0],
+        student: question.student_name,
+        class: question.student_class,
+    };
+
+    if (!formatQuestionObj.id) delete formatQuestionObj.id;
+    delete formatQuestionObj.submit_at;
+    delete formatQuestionObj.student_name;
+    delete formatQuestionObj.student_class;
+    return formatQuestionObj;
+}
+
+function formatAnswerObj(answer: AnswerDB): AnswerResObj {
+    const formatQuestionObj = {
+        answer: answer.answer,
+        answeredAt: new Date(answer.answered_at)
+            .toISOString()
+            .replace('T', ' ')
+            .split('Z')[0],
+        answeredBy: answer.answered_by,
+    };
+    return formatQuestionObj;
 }
 
 export { createQuestion, getQuestionById, postAnswer, getUnansweredQuestions };

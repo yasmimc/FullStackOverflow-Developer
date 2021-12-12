@@ -1,7 +1,7 @@
 import connection from '../database/connection';
 import AnswerDB from '../protocols/AnswerDB';
-import { Question } from '../protocols/Question';
-import { QuestionDB } from '../protocols/QuestionDB';
+import Question from '../protocols/Question';
+import QuestionDB from '../protocols/QuestionDB';
 import TagDB from '../protocols/TagDB';
 
 async function insertQuestion(question: Question): Promise<QuestionDB> {
