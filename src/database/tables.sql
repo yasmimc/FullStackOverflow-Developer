@@ -3,7 +3,7 @@ CREATE TABLE "questions" (
 	"question" TEXT NOT NULL,
 	"submit_at" timestamp NOT NULL DEFAULT 'now()',
 	"student_name" TEXT NOT NULL,
-	"student_class" char(3) NOT NULL,
+	"student_class" character varying NOT NULL,
 	"answered" bool NOT NULL DEFAULT 'false',
 	"tags" TEXT NOT NULL,
 	CONSTRAINT "questions_pk" PRIMARY KEY ("id")
@@ -16,7 +16,7 @@ CREATE TABLE "questions" (
 CREATE TABLE "users" (
 	"id" serial NOT NULL,
 	"name" TEXT NOT NULL,
-	"class" char(3) NOT NULL,
+	"class" character varying NOT NULL,
 	"token" uuid NOT NULL,
 	CONSTRAINT "users_pk" PRIMARY KEY ("id")
 ) WITH (
