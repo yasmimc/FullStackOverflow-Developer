@@ -5,6 +5,9 @@ import * as questionService from '../services/questionServices';
 import AnsweredQuestionError from '../errors/AnsweredQuestionError';
 import UnansweredQuestionsNotFoundError from '../errors/UnansweredQuestionsNotFoundError';
 import QuestionNotFoundError from '../errors/QuestionNotFoundError';
+import PostQuestionError from '../errors/PostQuestionError';
+import InsertTagsError from '../errors/InsertTagsError';
+import InsertAnswerError from '../errors/InsertAnswerError';
 
 async function postQuestion(req: Request, res: Response): Promise<Response> {
     try {
@@ -20,6 +23,12 @@ async function postQuestion(req: Request, res: Response): Promise<Response> {
 
         return res.send(insertedQuestionId);
     } catch (error) {
+        if (
+            error instanceof PostQuestionError ||
+            error instanceof InsertTagsError
+        ) {
+            return res.status(502).send(error.message);
+        }
         return res.sendStatus(500);
     }
 }
@@ -30,6 +39,9 @@ async function getQuestion(req: Request, res: Response): Promise<Response> {
         const question = await questionService.getQuestionById(Number(id));
         return res.send(question);
     } catch (error) {
+        if (error instanceof QuestionNotFoundError) {
+            return res.status(404).send(error.message);
+        }
         return res.sendStatus(500);
     }
 }
@@ -44,17 +56,20 @@ async function postAnswer(req: Request, res: Response) {
             user.id,
             answer
         );
-        res.send(question);
+        return res.send(question);
     } catch (error) {
-        if (error instanceof AnsweredQuestionError) {
-            return res.status(400).send(error.message);
-        }
-
         if (error instanceof QuestionNotFoundError) {
             return res.status(404).send(error.message);
         }
 
-        res.sendStatus(500);
+        if (error instanceof AnsweredQuestionError) {
+            return res.status(400).send(error.message);
+        }
+
+        if (error instanceof InsertAnswerError) {
+            return res.status(502).send(error.message);
+        }
+        return res.sendStatus(500);
     }
 }
 
@@ -70,7 +85,7 @@ async function getUnansweredQuestions(
         if (error instanceof UnansweredQuestionsNotFoundError) {
             return res.status(404).send(error.message);
         }
-        res.sendStatus(500);
+        return res.sendStatus(500);
     }
 }
 
