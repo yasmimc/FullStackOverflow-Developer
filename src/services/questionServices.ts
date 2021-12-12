@@ -135,7 +135,11 @@ async function getUnansweredQuestions(): Promise<QuestionResObj[]> {
             'Unanswered questions were not found'
         );
     }
-    return result.map((question) => formatQuestionObj(question));
+    return result.map((question) => {
+        const result = formatQuestionObj(question);
+        delete result.answered;
+        return result;
+    });
 }
 
 function formatQuestionObj(question: QuestionDB): QuestionResObj {
