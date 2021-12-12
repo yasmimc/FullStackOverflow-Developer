@@ -5,6 +5,7 @@ CREATE TABLE "questions" (
 	"student_name" TEXT NOT NULL,
 	"student_class" char(3) NOT NULL,
 	"answered" bool NOT NULL DEFAULT 'false',
+	"tags" TEXT NOT NULL,
 	CONSTRAINT "questions_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE

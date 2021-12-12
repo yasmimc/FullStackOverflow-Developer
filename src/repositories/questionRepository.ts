@@ -5,9 +5,9 @@ import QuestionDB from '../protocols/QuestionDB';
 import TagDB from '../protocols/TagDB';
 
 async function insertQuestion(question: Question): Promise<QuestionDB> {
-    delete question.tags;
-    const query = `INSERT INTO questions(question, student_name, student_class) 
-        VALUES ($1, $2, $3) RETURNING *`;
+    // delete question.tags;
+    const query = `INSERT INTO questions(question, student_name, student_class, tags) 
+        VALUES ($1, $2, $3, $4) RETURNING *`;
 
     const values = Object.values(question);
 

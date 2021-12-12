@@ -17,6 +17,7 @@ async function createQuestion(question: Question): Promise<Object> {
         question: question.question.trim(),
         student: question.student.trim(),
         class: question.class.trim(),
+        tags: question.tags,
     };
 
     const insertedQuestion: QuestionDB =
