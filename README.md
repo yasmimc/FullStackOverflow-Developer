@@ -15,7 +15,7 @@ You must have installed node and npm.
 
 First run `npm i` to install all dependencies.
 
-Use the sql script at to create your database structure.
+Use the sql script to create your database structure.
 
 Script here: https://github.com/yasmimc/FullStackOverflow-Developer/blob/35497a702d614ccf9bd9bcc7fa907a07155d618f/src/database/tables.sql
 
