@@ -17,7 +17,11 @@ First run `npm i` to install all dependencies.
 
 Use the sql script at to create your database structure.
 
+Script here: https://github.com/yasmimc/FullStackOverflow-Developer/blob/35497a702d614ccf9bd9bcc7fa907a07155d618f/src/database/tables.sql
+
 And then create a .env.test file following as an example the .env.example file, setting the environment variables accordingly. with data from your database.
+
+Example of .env.test file here: https://github.com/yasmimc/FullStackOverflow-Developer/blob/35497a702d614ccf9bd9bcc7fa907a07155d618f/.env.example
 
 In the project directory, you can run:
 
