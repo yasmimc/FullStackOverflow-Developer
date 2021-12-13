@@ -116,7 +116,10 @@ async function updateQuestionAsAnswered(
 
 async function fetchQuestionAnswer(questionId: number): Promise<AnswerDB> {
     const result = await connection.query(
-        `SELECT * FROM answers WHERE question_id=$1`,
+        `SELECT * FROM answers 
+        JOIN users 
+        ON answers.answered_by = users.id 
+        WHERE question_id=$1`,
         [questionId]
     );
 

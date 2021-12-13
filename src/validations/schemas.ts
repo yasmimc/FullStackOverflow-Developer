@@ -4,7 +4,7 @@ const questionsSchema: joi.ObjectSchema = joi.object({
     question: joi.string().required(),
     student: joi.string().required(),
     class: joi.string().max(3).required(),
-    tags: joi.string(),
+    tags: joi.string().required(),
 });
 
 const usersSchema: joi.ObjectSchema = joi.object({
@@ -13,7 +13,7 @@ const usersSchema: joi.ObjectSchema = joi.object({
 });
 
 const answersSchema: joi.ObjectSchema = joi.object({
-    ansewer: joi.string().required(),
+    answer: joi.string().required(),
 });
 
 export { questionsSchema, usersSchema, answersSchema };

@@ -173,7 +173,7 @@ function formatAnswerObj(answer: AnswerDB): AnswerResObj {
             .toISOString()
             .replace('T', ' ')
             .split('.')[0],
-        answeredBy: answer.answered_by,
+        answeredBy: answer.name,
     };
     return formatQuestionObj;
 }
