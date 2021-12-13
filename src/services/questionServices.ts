@@ -154,7 +154,8 @@ function formatQuestionObj(question: QuestionDB): QuestionResObj {
         submitAt: new Date(question.submit_at)
             .toISOString()
             .replace('T', ' ')
-            .split('.')[0],
+            .split('.')[0]
+            .substring(0, 16),
         student: question.student_name,
         class: question.student_class,
     };
@@ -172,7 +173,8 @@ function formatAnswerObj(answer: AnswerDB): AnswerResObj {
         answeredAt: new Date(answer.answered_at)
             .toISOString()
             .replace('T', ' ')
-            .split('.')[0],
+            .split('.')[0]
+            .substring(0, 16),
         answeredBy: answer.name,
     };
     return formatQuestionObj;
